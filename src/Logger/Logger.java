@@ -12,7 +12,6 @@ public class Logger {
     public static void close() {
         writer.close();
     }
-    //  The goal is to print to file; that is not important yet
     public static void log(String message) {
         writer.println(message);
         System.out.println(message);
@@ -21,7 +20,6 @@ public class Logger {
         log("");
     }
     public static void log(int[][] arr) {
-        //  Find the padding between characters
         int padding = 0;
         int a = arr.length;
         while (0 < a) {
