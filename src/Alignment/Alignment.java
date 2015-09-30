@@ -16,8 +16,7 @@ public class Alignment {
      * @param str1 The first string to align
      * @param str2 The second string to align
      */
-    public static void globalAlignment (String str1, String str2) 
-        throws Exception {
+    public static void globalAlignment (String str1, String str2) {
         //  Construct the table
         int w = str1.length();
         int h = str2.length();
@@ -26,16 +25,43 @@ public class Alignment {
 //          throw new RuntimeException("Cannot align "
 //                  + "strings of different lengths!");
 //      }
-        int[][] table = new int[w][h];
+        scores = new int[w][h];
+        
+        //  Initialize to maximally bad scores (allows tracking of whether scores are known)
+        for (int i = 0; i < w; i++) {
+            for (int j = 0; j < h; j++) {
+                scores[i][j] = Integer.MIN_VALUE;
+            }
+        }
+        
+        //  Initialization of path does not matter
         path = new int[w][h];
+        
         //  Call the recursive, dynamic programming method
         //  Use the bottom right corner
-        score(table, str1, str2, w - 1, h - 1);
+        score(str1, str2, w - 1, h - 1);
+        
         //  Construct the string
-        //  TODO
+        
+        //TODO
+        
+        
+        
+        //  TESTING: Show table results
+        Logger.open();
+        Logger.log(scores);
+        Logger.log(path);
+        Logger.close();
     }
     //  Recursive dynamic programming method to populate table
-    private static int score (int[][] table, String str1, String str2, int i1, int i2) {
+    //  Max recursion depth is MAX(str1.length(), str2.length())
+    //  O(n^2); O(3^n) without the table check
+    private static int score (String str1, String str2, int i1, int i2) {
+        //  Use previous scores when available (makes polynomial runtime)
+        if (scores[i1][i2] != Integer.MIN_VALUE) {
+            return scores[i1][i2];
+        }
+        
         int[] previous = new int[3];
         
         //  Base case: Top edge of the table
@@ -44,16 +70,20 @@ public class Alignment {
         }
         else {
             //  Get the score from above
-            previous[U] = score (table, str1, str2, i1 - 1, i2);
+            previous[U] = score (str1, str2, i1 - 1, i2)
+                    //  but penalize the indel
+                    + INDEL_SCORE;
         }
         
         //  Base case: Left edge of the table
-        if (i1 == 0) {
+        if (i2 == 0) {
             previous[L] = BORDER_SCORE;
         }
         else {
             //  Get the score from the left
-            previous[L] = score (table, str1, str2, i1, i2 - 1);
+            previous[L] = score (str1, str2, i1, i2 - 1)
+                    //  but penalize the indel
+                    + INDEL_SCORE;
         }
         
         //  Base case: Either edge of the table
@@ -62,23 +92,37 @@ public class Alignment {
         }
         else {
             //  Get the score from the upper left
-            previous[UL] = score (table, str1, str2, i1 - 1, i2 - 1);
+            previous[UL] = score (str1, str2, i1 - 1, i2 - 1);
+            //  Reward a match
+            if (str1.charAt(i1) == str2.charAt(i2)) {
+                previous[UL] += MATCH_SCORE;
+            }
+            //  But penalize a mismatch
+            else {
+                previous[UL] += MISMATCH_SCORE;
+            }
         }
         
         //  Find the top-scoring cell
-        int max = max_index(previous);
+        int maxi = max_index(previous);
+        
+        //  Update the score
+        scores[i1][i2] = previous[maxi];
         
         //  Update the path
-        path[i1][i2] = max;
+        path[i1][i2] = maxi;
         
         //  Return the highest score from this run
-        return previous[max];
+        return previous[maxi];
     }
     
     //  Used internally to identify direction
     private static final int UL = 0;    //  favor this in case of tie
     private static final int U = 1;
     private static final int L = 2;
+    
+    //  Used internally to construct the Dynamic Programming scores
+    private static int[][] scores;
     
     //  Used internally to construct the Dynamic Programming path
     private static int[][] path;
@@ -94,6 +138,9 @@ public class Alignment {
         return max;
     }
     public static void main(String[] args) {
-        
+        //  example from textbook
+        String str1 = "AATTGCCGCCGTCGTTTTCAGCAGTTATGTCAGATC";
+        String str2 = "TCCCAGTTATGTCAGGGGACACGAGCATGCAGAGAC";
+        globalAlignment(str1, str2);
     }
 }
