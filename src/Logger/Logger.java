@@ -4,9 +4,9 @@ import java.io.PrintWriter;
 
 public class Logger {
     private static PrintWriter writer;
-    public static void open() {
+    public static void open(String file) {
         try {
-            writer = new PrintWriter("logs.txt", "UTF-8");
+            writer = new PrintWriter(file, "UTF-8");
         } catch (Exception e) {}
     }
     public static void close() {
@@ -15,13 +15,14 @@ public class Logger {
     //  The goal is to print to file; that is not important yet
     public static void log(String message) {
         writer.println(message);
+        System.out.println(message);
     }
-    public static void emptyline() {
+    public static void log() {
         log("");
     }
     public static void log(int[][] arr) {
         //  Find the padding between characters
-        int padding = 1;
+        int padding = 0;
         int a = arr.length;
         while (0 < a) {
             a /= 10;

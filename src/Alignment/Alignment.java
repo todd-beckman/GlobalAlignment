@@ -16,10 +16,12 @@ public class Alignment {
      * @param str1 The first string to align
      * @param str2 The second string to align
      */
-    public static void globalAlignment (String str1, String str2) {
+    public static String globalAlignment (String str1, String str2) {
         //  Construct the table
         int w = str1.length();
         int h = str2.length();
+        int i1 = w - 1;
+        int i2 = h - 1;
 //      Is this true?
 //      if (w != h) {
 //          throw new RuntimeException("Cannot align "
@@ -39,19 +41,30 @@ public class Alignment {
         
         //  Call the recursive, dynamic programming method
         //  Use the bottom right corner
-        score(str1, str2, w - 1, h - 1);
+        score(str1, str2, i1, i2);
         
         //  Construct the string
+        // (contains imperfections; not fully functional)
+        String result = "";
+        while (-1 < i1 && -1 < i2) {
+            switch (path[i1][i2]){
+            case U:
+                result = str1.charAt(i1) + result;
+                i1--;
+                break;
+            case L:
+                result = str2.charAt(i2) + result;
+                i2--;
+                break;
+            case UL:
+                result = str1.charAt(i1) + result;
+                i1--;
+                i2--;
+                break;
+            }
+        }
         
-        //TODO
-        
-        
-        
-        //  TESTING: Show table results
-        Logger.open();
-        Logger.log(scores);
-        Logger.log(path);
-        Logger.close();
+        return result;
     }
     //  Recursive dynamic programming method to populate table
     //  Max recursion depth is MAX(str1.length(), str2.length())
@@ -137,10 +150,26 @@ public class Alignment {
         }
         return max;
     }
+    private static String genString(int length, char[] alphabet) {
+        char[] str = new char[length];
+        for (int i = 0; i < length; i++){
+            str[i] = alphabet[(int)(Math.random() * alphabet.length)];
+        }
+        return String.valueOf(str);
+    }
     public static void main(String[] args) {
-        //  example from textbook
-        String str1 = "AATTGCCGCCGTCGTTTTCAGCAGTTATGTCAGATC";
-        String str2 = "TCCCAGTTATGTCAGGGGACACGAGCATGCAGAGAC";
-        globalAlignment(str1, str2);
+        char[] alphabet = {'A', 'C', 'G', 'T'};
+        String str1 = genString(10, alphabet);
+        String str2 = genString(10, alphabet);
+        String result = globalAlignment(str1, str2);
+        
+
+        Logger.open("logs_single10.txt");
+        Logger.log("1: " + str1);
+        Logger.log("2: " + str2);
+        Logger.log("R: " + result);
+        Logger.log(scores);
+        Logger.log(path);
+        Logger.close();
     }
 }
