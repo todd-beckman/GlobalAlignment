@@ -166,18 +166,18 @@ public class Alignment {
         return String.valueOf(str);
     }
     public static void main(String[] args) {
+        int ITERATIONS = 1;
+        int LENGTH = 100;
         char[] alphabet = {'A', 'C', 'G', 'T'};
-        String str1 = genString(10, alphabet);
-        String str2 = genString(10, alphabet);
-        String result = globalAlignment(str1, str2);
-        
-
-        Logger.open("logs_single10.txt");
-        Logger.log("1: " + str1);
-        Logger.log("2: " + str2);
-        Logger.log("R: " + result);
-        Logger.log(scores);
-        Logger.log(path);
+        Logger.open("logs_" + ITERATIONS + "x" + LENGTH +".txt");
+        for (int i = 0; i < ITERATIONS; i++) {
+            String str1 = genString(LENGTH, alphabet);
+            String str2 = genString(LENGTH, alphabet);
+            Logger.log("1: " + str1);
+            Logger.log("2: " + str2);
+            Logger.log("R: " + globalAlignment(str1, str2));
+            Logger.log();
+        }
         Logger.close();
     }
 }
