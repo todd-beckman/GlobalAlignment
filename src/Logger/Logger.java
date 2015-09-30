@@ -34,9 +34,11 @@ public class Logger {
         }
         log(str);
     }
+    private static String spaces = "                  ";
     private static String pad(int padding, String message) {
-        while (message.length() < padding) {
-            message = " " + message;
+        int numspaces = padding - message.length();
+        if (0 < numspaces) {
+            return spaces.substring(0, numspaces) + message;
         }
         return message;
     }

@@ -6,11 +6,11 @@ import Logger.Logger;
 
 public class Alignment {
     //  Score of a match
-    public static final int MATCH_SCORE = 1;
+    public static int MATCH_SCORE = 1;
     //  Score of a mismatch
-    public static final int MISMATCH_SCORE = -1;
+    public static int MISMATCH_SCORE = -1;
     //  Score of an indel
-    public static final int INDEL_SCORE = -1;
+    public static int INDEL_SCORE = -1;
     //  Score of the border
     public static final int BORDER_SCORE = 0;
     /**
@@ -24,14 +24,9 @@ public class Alignment {
         int h = str2.length();
         int i1 = w - 1;
         int i2 = h - 1;
-//      Is this true?
-//      if (w != h) {
-//          throw new RuntimeException("Cannot align "
-//                  + "strings of different lengths!");
-//      }
-        scores = new int[w][h];
         
         //  Initialize to maximally bad scores (allows tracking of whether scores are known)
+        scores = new int[w][h];
         for (int i = 0; i < w; i++) {
             for (int j = 0; j < h; j++) {
                 scores[i][j] = Integer.MIN_VALUE;
@@ -64,18 +59,11 @@ public class Alignment {
                 break;
             }
         }
-        //  Append the unused beginning of the unfinished string
-        /*  Is this needed? I think not, but I could see it being argued
-        while (-1 < i1) {
-            result = str1.charAt(i1--) + result;
-        }
-        while (-1 < i2) {
-            result = str2.charAt(i2--) + result;
-        }
-        */
+
         
         return result;
     }
+    
     //  Recursive dynamic programming method to populate table
     //  Max recursion depth is MAX(str1.length(), str2.length())
     //  O(n^2); O(3^n) without the table check
@@ -169,6 +157,12 @@ public class Alignment {
     }
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        System.out.print("What score should a match yield?           ");
+        MATCH_SCORE = scanner.nextInt();
+        System.out.print("What score should a mismatch yield?        ");
+        MISMATCH_SCORE = scanner.nextInt();
+        System.out.print("What score should an indel yield?          ");
+        INDEL_SCORE = scanner.nextInt();
         System.out.print("How many times should the program run?     ");
         int ITERATIONS = scanner.nextInt();
         System.out.print("What should the lengths of the strings be? ");
