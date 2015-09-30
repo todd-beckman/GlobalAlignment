@@ -8,7 +8,7 @@ To run this program when compiled, call Alignment.main.
 
 ## Notice
 
-The results of the run are written by default to logs.txt in the instance's local directory. This can be changed, but is currently hard-coded.
+The results of the run are written by default to logs_(iterations)x(lengths).txt in the instance's local directory. This can be changed, but is currently hard-coded.
 
 ## Warning
 
