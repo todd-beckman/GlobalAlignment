@@ -6,9 +6,9 @@ public class Alignment {
     //  Score of a match
     public static final int MATCH_SCORE = 1;
     //  Score of a mismatch
-    public static final int MISMATCH_SCORE = 0;
+    public static final int MISMATCH_SCORE = -1;
     //  Score of an indel
-    public static final int INDEL_SCORE = 0;
+    public static final int INDEL_SCORE = -1;
     //  Score of the border
     public static final int BORDER_SCORE = 0;
     /**
@@ -44,7 +44,6 @@ public class Alignment {
         score(str1, str2, i1, i2);
         
         //  Construct the string
-        // (contains imperfections; not fully functional)
         String result = "";
         while (-1 < i1 && -1 < i2) {
             switch (path[i1][i2]){
@@ -63,6 +62,15 @@ public class Alignment {
                 break;
             }
         }
+        //  Append the unused beginning of the unfinished string
+        /*  Is this needed? I think not, but I could see it being argued
+        while (-1 < i1) {
+            result = str1.charAt(i1--) + result;
+        }
+        while (-1 < i2) {
+            result = str2.charAt(i2--) + result;
+        }
+        */
         
         return result;
     }
