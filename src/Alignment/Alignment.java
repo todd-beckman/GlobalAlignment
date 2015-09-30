@@ -185,6 +185,7 @@ public class Alignment {
             Logger.log("1: " + str1);
             Logger.log("2: " + str2);
             Logger.log("R: " + globalAlignment(str1, str2));
+            Logger.log("Score: " + scores[LENGTH - 1][LENGTH - 1]);
             Logger.log();
         }
         Logger.close();
