@@ -1,5 +1,7 @@
 package Alignment;
 
+import java.util.Scanner;
+
 import Logger.Logger;
 
 public class Alignment {
@@ -166,10 +168,17 @@ public class Alignment {
         return String.valueOf(str);
     }
     public static void main(String[] args) {
-        int ITERATIONS = 1;
-        int LENGTH = 100;
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("How many times should the program run?     ");
+        int ITERATIONS = scanner.nextInt();
+        System.out.print("What should the lengths of the strings be? ");
+        int LENGTH = scanner.nextInt();
+        scanner.close();
+        System.out.println("Working...");
+        String logfile = "logs_" + ITERATIONS + "x" + LENGTH +".txt";
+        
         char[] alphabet = {'A', 'C', 'G', 'T'};
-        Logger.open("logs_" + ITERATIONS + "x" + LENGTH +".txt");
+        Logger.open(logfile);
         for (int i = 0; i < ITERATIONS; i++) {
             String str1 = genString(LENGTH, alphabet);
             String str2 = genString(LENGTH, alphabet);
@@ -179,5 +188,6 @@ public class Alignment {
             Logger.log();
         }
         Logger.close();
+        System.out.println("Finished! You can find the results at " + logfile + ".");
     }
 }
