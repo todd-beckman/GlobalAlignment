@@ -12,7 +12,7 @@ public class Main {
         }
         return String.valueOf(str);
     }
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
         System.out.print("What score should a match yield?           ");
         Alignment.MATCH_SCORE = scanner.nextInt();
@@ -37,6 +37,7 @@ public class Main {
             Logger.log("2: " + str2);
             Logger.log("R: " + Alignment.globalAlignment(str1, str2));
             Logger.log("Score: " + Alignment.scores[LENGTH - 1][LENGTH - 1]);
+            Logger.log(Alignment.scores);
             Logger.log();
         }
         Logger.close();
